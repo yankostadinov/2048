@@ -1,0 +1,16 @@
+.Grid-Container, .Grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.Grid-Controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.Grid-Row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

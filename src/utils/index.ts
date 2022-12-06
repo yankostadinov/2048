@@ -1,8 +1,4 @@
-export type Grid = Array<Array<number>>;
-interface GridPosition {
-  row: number;
-  col: number;
-}
+import { Grid, GridPosition } from '../types';
 
 export const getRandomInt = (min: number, max: number) => {
   min = Math.ceil(min);
@@ -19,38 +15,21 @@ export const getGridEmptyPositions = (grid: Grid) => {
 
   grid.forEach((values, row) => {
     values.forEach((value, col) => {
-      if (value === 0) emptyPositions.push({ row, col });
+      if (value === null) emptyPositions.push({ row, col });
     });
   });
 
   return emptyPositions;
 };
 
-export const checkGridHasAnyEmptyPositions = (grid: Grid) => {
-  return getGridEmptyPositions(grid).length !== 0;
-};
-
-export const pickRandomPositionInGrid = (grid: Grid) => {
-  return {
-    row: getRandomInt(0, grid.length),
-    col: getRandomInt(0, grid[0].length),
-  } as GridPosition;
-};
-
 export const pickRandomEmptyPosition = (grid: Grid) => {
   const emptyPositions = getGridEmptyPositions(grid);
 
-  return getRandomFromArray(emptyPositions);
+  return getRandomFromArray(emptyPositions) as GridPosition;
 };
 
 export const generateGrid = (size: number) => {
-  const grid = Array<number>(size)
-    .fill(0)
-    .map(() => Array<number>(size).fill(0));
-  const startingPosition = pickRandomPositionInGrid(grid);
-
-  console.error(startingPosition);
-  grid[startingPosition.row][startingPosition.col] = 2;
-
-  return grid;
+  return Array(size)
+    .fill(null)
+    .map(() => Array(size).fill(null));
 };

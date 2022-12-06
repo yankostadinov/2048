@@ -1,45 +1,33 @@
-import { FC, useMemo, useState } from 'react';
-import { generateGrid, pickRandomEmptyPosition } from '../utils';
-import NumberBlock from './NumberBlock';
-import './Grid.css';
+import { Box, Flex } from '@chakra-ui/react';
+import { FC } from 'react';
+import useGameStore from '../utils/store';
+import NumberTile from './NumberTile';
 
-interface Props {
-  size: number;
-}
-
-const Grid: FC<Props> = ({ size }) => {
-  const startingGrid = useMemo(() => generateGrid(size), [size]);
-  const [grid, setGrid] = useState(startingGrid);
-
-  const onButtonClick = () => {
-    const newSpotToFill = pickRandomEmptyPosition(grid);
-    setGrid(
-      grid.map((values, row) =>
-        row === newSpotToFill?.row
-          ? values.map((value, col) => (col === newSpotToFill.col ? 2 : value))
-          : values,
-      ),
-    );
-  };
+const Grid: FC = () => {
+  const grid = useGameStore(store => store.grid);
+  const tiles = useGameStore(store => store.numberTiles);
 
   return (
-    <main className="Grid-Container">
-      <section className="Grid-Controls">
-        <button onClick={onButtonClick}>Left</button>
-        <button onClick={onButtonClick}>Up</button>
-        <button onClick={onButtonClick}>Right</button>
-        <button onClick={onButtonClick}>Down</button>
-      </section>
-      <section className="Grid">
-        {grid.map((values, row) => (
-          <div key={row} className="Grid-Row">
-            {values.map((value, col) => (
-              <NumberBlock number={value} key={`${row}-${col}`} />
-            ))}
-          </div>
+    <Box pos="relative">
+      {grid.map((rows, rowIndex) => (
+        <Flex key={rowIndex}>
+          {rows.map((_, colIndex) => (
+            <Box
+              key={`${rowIndex}-${colIndex}`}
+              w="50px"
+              h="50px"
+              bg="gray.400"
+              border="1px solid black"
+            />
+          ))}
+        </Flex>
+      ))}
+      <Box position="absolute" top="0" left="0">
+        {tiles.map(tile => (
+          <NumberTile key={`${tile.row}-${tile.col}`} tileData={tile} />
         ))}
-      </section>
-    </main>
+      </Box>
+    </Box>
   );
 };
 

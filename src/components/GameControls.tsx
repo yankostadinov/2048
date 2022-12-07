@@ -1,16 +1,17 @@
 import { Button, HStack } from '@chakra-ui/react';
 import { FC } from 'react';
+import { MoveDirection } from '../types';
 import useGameStore from '../utils/store';
 
 const GameControls: FC = () => {
-  const addNewTile = useGameStore(store => store.addNewTile);
+  const move = useGameStore(store => store.move);
 
   return (
     <HStack justify="center">
-      <Button onClick={addNewTile}>Left</Button>
-      <Button onClick={addNewTile}>Up</Button>
-      <Button onClick={addNewTile}>Down</Button>
-      <Button onClick={addNewTile}>Right</Button>
+      <Button onClick={() => move(MoveDirection.LEFT)}>Left</Button>
+      <Button onClick={() => move(MoveDirection.UP)}>Up</Button>
+      <Button onClick={() => move(MoveDirection.DOWN)}>Down</Button>
+      <Button onClick={() => move(MoveDirection.RIGHT)}>Right</Button>
     </HStack>
   );
 };

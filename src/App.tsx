@@ -2,27 +2,20 @@ import { Box, Button, Center, HStack, Text, VStack } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import GameControls from './components/GameControls';
 import Grid from './components/Grid';
+import { GameStatus } from './types';
 import useGameStore from './utils/store';
 
 const App: FC = () => {
-  const [size, setSize] = useState(6);
   const startGame = useGameStore(store => store.startGame);
-  const gameState = useGameStore(store => store.gameState.value);
+  const gameStatus = useGameStore(store => store.gameStatus);
 
   return (
     <VStack as="main">
-      <HStack>
-        <Button onClick={() => setSize(size - 1)} disabled={size === 3}>
-          -
-        </Button>
-        <span>{size}</span>
-        <Button onClick={() => setSize(size + 1)}>+</Button>
-      </HStack>
-      <Button onClick={() => startGame(size)}>Start new game</Button>
-      {gameState !== 'NOT_STARTED' && (
+      <Button onClick={() => startGame()}>Start new game</Button>
+      {gameStatus !== GameStatus.INITIAL && (
         <>
           <Box pos="relative">
-            {gameState === 'OVER' && (
+            {[GameStatus.LOSE, GameStatus.WIN].includes(gameStatus) && (
               <Center
                 pos="absolute"
                 top="0"
@@ -30,13 +23,18 @@ const App: FC = () => {
                 h="100%"
                 w="100%"
                 bg="blackAlpha.700"
-                zIndex={3}>
-                <Text color="white">Game Over</Text>
+                zIndex={3}
+              >
+                <Text color="white">
+                  {gameStatus === GameStatus.WIN
+                    ? 'Congratulations, you win!'
+                    : 'Game Over'}
+                </Text>
               </Center>
             )}
-            <Grid key={size} />
+            <Grid />
           </Box>
-          {gameState === 'IN_PROGRESS' && <GameControls />}
+          {gameStatus === GameStatus.IN_PROGRESS && <GameControls />}
         </>
       )}
     </VStack>

@@ -17,7 +17,7 @@ const Grid: FC = () => {
               key={`${rowIndex}-${colIndex}`}
               w="75px"
               h="75px"
-              bg={col === NonNumberTiles.OBSTACLE ? 'gray.800' : 'gray.400'}
+              bg={col === NonNumberTiles.OBSTACLE ? 'gray.800' : 'gray.300'}
               border="1px solid black"
             />
           ))}

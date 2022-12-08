@@ -2,6 +2,7 @@ import { Center } from '@chakra-ui/react';
 import { motion, Variants } from 'framer-motion';
 import { FC } from 'react';
 import { TileData } from '../types';
+import config from '../utils/config';
 
 interface Props {
   tileData: TileData;
@@ -44,7 +45,7 @@ const NumberTile: FC<Props> = ({
     <Center
       w="65px"
       h="65px"
-      bg="gray.300"
+      bg={config.powerColors[power]}
       borderRadius={5}
       m="5px"
       fontSize="20px"

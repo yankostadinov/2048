@@ -1,8 +1,9 @@
-import { Box, Button, Center, HStack, Text, VStack } from '@chakra-ui/react';
-import { FC, useState } from 'react';
+import { Box, Button, Center, Text, VStack } from '@chakra-ui/react';
+import { FC } from 'react';
 import GameControls from './components/GameControls';
 import Grid from './components/Grid';
 import { GameStatus } from './types';
+import config from './utils/config';
 import useGameStore from './utils/store';
 
 const App: FC = () => {
@@ -23,7 +24,8 @@ const App: FC = () => {
                 h="100%"
                 w="100%"
                 bg="blackAlpha.700"
-                zIndex={3}
+                // make sure the win screen is always on top of the winning tile
+                zIndex={config.targetPower + 1}
               >
                 <Text color="white">
                   {gameStatus === GameStatus.WIN

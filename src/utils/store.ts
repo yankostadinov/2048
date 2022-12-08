@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import create from 'zustand';
 import {
   GameStatus,
@@ -41,7 +42,7 @@ const useGameStore = create<GameState>((set, get) => ({
       const emptyPosition = pickRandomEmptyPosition(grid);
       const newTile: TileData = {
         ...emptyPosition,
-        id: crypto.randomUUID(),
+        id: uuid(),
         power: 1,
       };
 

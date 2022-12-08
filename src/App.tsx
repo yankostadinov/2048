@@ -1,4 +1,14 @@
-import { Box, Button, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
+  Heading,
+  VStack,
+} from '@chakra-ui/react';
 import { FC } from 'react';
 import GameControls from './components/GameControls';
 import Grid from './components/Grid';
@@ -12,19 +22,30 @@ const App: FC = () => {
   const gameStatus = useGameStore(store => store.gameStatus);
 
   return (
-    <VStack as="main">
-      <Button onClick={() => startGame()}>Start new game</Button>
-      {gameStatus !== GameStatus.INITIAL && (
-        <>
-          <Box pos="relative">
-            {gameStatus === GameStatus.LOSE && <LoseMessage />}
-            <Grid />
-          </Box>
+    <Center h="100vh" w="100vw">
+      <Card align="center" px="20px" boxShadow="2xl">
+        <CardHeader>
+          <Heading>Welcome to 2048!</Heading>
+        </CardHeader>
+        <CardBody>
+          <VStack as="main">
+            <Button onClick={() => startGame()}>Start new game</Button>
+            {gameStatus !== GameStatus.INITIAL && (
+              <>
+                <Box pos="relative">
+                  {gameStatus === GameStatus.LOSE && <LoseMessage />}
+                  <Grid />
+                </Box>
+              </>
+            )}
+          </VStack>
+        </CardBody>
+        <CardFooter>
           {gameStatus === GameStatus.IN_PROGRESS && <GameControls />}
           {gameStatus === GameStatus.WIN && <WinMessage />}
-        </>
-      )}
-    </VStack>
+        </CardFooter>
+      </Card>
+    </Center>
   );
 };
 

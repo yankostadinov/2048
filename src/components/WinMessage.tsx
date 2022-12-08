@@ -6,7 +6,7 @@ const WinScreen: FC = () => (
   <Center>
     <motion.div
       animate={{
-        scale: [1, 1.5, 1],
+        scale: [1, 1.2, 1],
         color: ['#FF0000', '#00FF00'],
         transition: { repeat: Infinity },
       }}

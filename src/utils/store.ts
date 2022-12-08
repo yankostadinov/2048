@@ -96,6 +96,9 @@ const useGameStore = create<GameState>((set, get) => ({
               const otherTileInSpot = numberTiles.get(
                 grid[row][columnToMoveTo] as string,
               ) as TileData;
+
+              if (otherTileInSpot.id === numberTile.id) continue;
+
               otherTileInSpot.destroy = true;
 
               // upgrade current tile and mark game as won if target power of 2 reached
@@ -143,6 +146,9 @@ const useGameStore = create<GameState>((set, get) => ({
               const otherTileInSpot = numberTiles.get(
                 grid[rowToMoveTo][col] as string,
               ) as TileData;
+
+              if (otherTileInSpot.id === numberTile.id) continue;
+
               otherTileInSpot.destroy = true;
 
 

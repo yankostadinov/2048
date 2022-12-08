@@ -1,11 +1,27 @@
 import { Center } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { FC } from 'react';
 import { TileData } from '../types';
 
 interface Props {
   tileData: TileData;
 }
+
+const animationVariants: Variants = {
+  poweringUp: ({ col, row }) => ({
+    scale: [1, 1.5, 1],
+    transition: { scale: { delay: 0.1, duration: 0.3 } },
+    x: col * 75,
+    y: row * 75,
+  }),
+  default: ({ col, row }) => ({
+    scale: 1,
+    x: col * 75,
+    y: row * 75,
+    // scale only animates here when tile initially spawns
+    transition: { scale: { delay: 0.2 } },
+  }),
+};
 
 const NumberTile: FC<Props> = ({ tileData: { power = 1, col, row } }) => (
   <motion.div
@@ -18,12 +34,10 @@ const NumberTile: FC<Props> = ({ tileData: { power = 1, col, row } }) => (
       x: col * 75,
       y: row * 75,
     }}
-    animate={{
-      scale: power > 1 ? [1, 1.5, 1] : 1,
-      x: col * 75,
-      y: row * 75,
-    }}
-    transition={{ duration: 0.3 }}
+    // custom props being passed to animation variants
+    custom={{ col, row }}
+    variants={animationVariants}
+    animate={power > 1 ? 'poweringUp' : 'default'}
   >
     <Center
       w="65px"

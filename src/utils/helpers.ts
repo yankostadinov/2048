@@ -14,14 +14,6 @@ export const getRandomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
-export const limitNumberWithinRange = (
-  number: number,
-  min: number,
-  max: number,
-) => {
-  return Math.min(Math.max(number, min), max);
-};
-
 export const pickRandomFromArray = (array: Array<any>) => {
   return array[getRandomInt(0, array.length)];
 };
@@ -36,6 +28,11 @@ export const getGridEmptyPositions = (grid: Grid) => {
   });
 
   return emptyPositions;
+};
+
+export const pickRandomEmptyPosition = (grid: Grid) => {
+  const emptyPositions = getGridEmptyPositions(grid);
+  return pickRandomFromArray(emptyPositions) as GridPosition;
 };
 
 export const generateGrid = (size: number) => {

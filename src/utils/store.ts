@@ -1,21 +1,18 @@
 import create from 'zustand';
 import {
-  findClosestTileToMoveTo,
-  generateGrid,
-  getGridEmptyPositions,
-  getRandomInt,
-  pickRandomFromArray,
-} from './helpers';
-import {
   GameStatus,
   Grid,
-  GridPosition,
   MoveDirection,
   NonNumberTiles,
   NumberTiles,
   TileData,
 } from '../types';
 import config from './config';
+import {
+  findClosestTileToMoveTo,
+  generateGrid,
+  pickRandomEmptyPosition,
+} from './helpers';
 
 interface GameState {
   gameStatus: GameStatus;
@@ -41,12 +38,11 @@ const useGameStore = create<GameState>((set, get) => ({
     set(state => {
       const grid = [...state.grid];
       const numberTiles = new Map(state.numberTiles);
-      const emptyPositions = getGridEmptyPositions(grid);
-      const emptyPosition = pickRandomFromArray(emptyPositions) as GridPosition;
+      const emptyPosition = pickRandomEmptyPosition(grid);
       const newTile: TileData = {
         ...emptyPosition,
         id: crypto.randomUUID(),
-        power: getRandomInt(1, 3),
+        power: 1,
       };
 
       grid[emptyPosition.row][emptyPosition.col] = newTile.id;
@@ -116,6 +112,7 @@ const useGameStore = create<GameState>((set, get) => ({
         gameStatus: gameWon ? GameStatus.WIN : state.gameStatus,
       };
     });
+    get().addNewTile();
   },
   clearCombinedTiles: () => {
     set(state => {

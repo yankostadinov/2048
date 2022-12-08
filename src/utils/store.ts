@@ -156,7 +156,6 @@ const useGameStore = create<GameState>((set, get) => ({
 
               otherTileInSpot.destroy = true;
 
-
               // upgrade current tile and mark game as won if target power of 2 reached
               numberTile.power += 1;
               numberTile.upgradedThisTurn = true;
@@ -182,7 +181,6 @@ const useGameStore = create<GameState>((set, get) => ({
     set(state => {
       const numberTiles = new Map(state.numberTiles);
       numberTiles.forEach(tile => {
-        if (tile.destroy) console.log('col ', tile.col, ' row ', tile.row);
         if (tile.destroy) numberTiles.delete(tile.id);
         else if (tile.upgradedThisTurn) tile.upgradedThisTurn = false;
       });

@@ -112,7 +112,7 @@ const useGameStore = create<GameState>((set, get) => ({
         gameStatus: gameWon ? GameStatus.WIN : state.gameStatus,
       };
     });
-    get().addNewTile();
+    if (get().gameStatus !== GameStatus.WIN) get().addNewTile();
   },
   clearCombinedTiles: () => {
     set(state => {

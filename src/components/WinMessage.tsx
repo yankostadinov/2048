@@ -12,7 +12,7 @@ const WinScreen: FC = () => (
       }}
     >
       <Text fontWeight="bold" fontSize="25px">
-        Congratulations, you won!
+        Congratulations, you win!
       </Text>
     </motion.div>
   </Center>

@@ -8,9 +8,9 @@ interface Props {
 }
 
 const animationVariants: Variants = {
-  poweringUp: ({ col, row }) => ({
-    scale: [1, 1.5, 1],
-    transition: { scale: { delay: 0.1, duration: 0.3 } },
+  upgrading: ({ col, row }) => ({
+    scale: [1, 1.6, 1],
+    transition: { scale: { delay: 0.1, duration: 0.5 } },
     x: col * 75,
     y: row * 75,
   }),
@@ -23,7 +23,9 @@ const animationVariants: Variants = {
   }),
 };
 
-const NumberTile: FC<Props> = ({ tileData: { power = 1, col, row } }) => (
+const NumberTile: FC<Props> = ({
+  tileData: { power = 1, col, row, upgradedThisTurn },
+}) => (
   <motion.div
     style={{
       position: 'absolute',
@@ -37,7 +39,7 @@ const NumberTile: FC<Props> = ({ tileData: { power = 1, col, row } }) => (
     // custom props being passed to animation variants
     custom={{ col, row }}
     variants={animationVariants}
-    animate={power > 1 ? 'poweringUp' : 'default'}
+    animate={upgradedThisTurn ? 'upgrading' : 'default'}
   >
     <Center
       w="65px"

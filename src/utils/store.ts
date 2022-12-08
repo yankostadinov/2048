@@ -65,7 +65,6 @@ const useGameStore = create<GameState>((set, get) => ({
 
       if ([MoveDirection.LEFT, MoveDirection.RIGHT].includes(direction)) {
         for (let row = 0; row < grid.length; row++) {
-          const currentRow = grid[row];
           // start from second column or second-to-last column since those aren't going to move
           const startingCol =
             direction === MoveDirection.LEFT ? 1 : grid.length - 2;
@@ -75,35 +74,87 @@ const useGameStore = create<GameState>((set, get) => ({
           for (
             let col = startingCol;
             // skip checking the column closest to the wall, since it's not going to move
-            columnsChecked < currentRow.length - 1;
+            columnsChecked < grid.length - 1;
             col -= deltaCol, columnsChecked++
           ) {
-            const tile = currentRow[col];
+            const tile = grid[row][col];
 
             if (tile === NonNumberTiles.EMPTY) continue;
             if (tile === NonNumberTiles.OBSTACLE) continue;
             const numberTile = numberTiles.get(tile) as TileData;
 
+            const currentRow = grid[row];
             const columnToMoveTo = findClosestTileToMoveTo(
               currentRow,
               numberTiles,
               numberTile.col,
               deltaCol,
             );
-            numberTile.col = columnToMoveTo;
-            currentRow[col] = NonNumberTiles.EMPTY;
-            if (typeof currentRow[columnToMoveTo] === 'string') {
-              numberTile.destroy = true;
-              const tileToUpgrade = numberTiles.get(
-                currentRow[columnToMoveTo] as string,
+            // combining with other tile already in this spot
+            if (typeof grid[row][columnToMoveTo] === 'string') {
+              // mark other tile for destruction
+              const otherTileInSpot = numberTiles.get(
+                grid[row][columnToMoveTo] as string,
               ) as TileData;
-              tileToUpgrade.power += 1;
+              otherTileInSpot.destroy = true;
 
-              // mark the game as won if you've reached the target power of 2
-              if (tileToUpgrade.power === config.targetPower) gameWon = true;
-            } else {
-              currentRow[columnToMoveTo] = numberTile.id;
+              // upgrade current tile and mark game as won if target power of 2 reached
+              numberTile.power += 1;
+              numberTile.upgradedThisTurn = true;
+              if (numberTile.power === config.targetPower) gameWon = true;
             }
+
+            numberTile.col = columnToMoveTo;
+            grid[row][col] = NonNumberTiles.EMPTY;
+            grid[row][columnToMoveTo] = numberTile.id;
+          }
+        }
+      } else if ([MoveDirection.UP, MoveDirection.DOWN].includes(direction)) {
+        for (let col = 0; col < grid.length; col++) {
+          // start from second row or second-to-last row since those aren't going to move
+          const startingRow =
+            direction === MoveDirection.UP ? 1 : grid.length - 2;
+          const deltaRow = direction === MoveDirection.UP ? -1 : 1;
+          let rowsChecked = 0;
+
+          for (
+            let row = startingRow;
+            // skip checking the last row because it's closest to the respective wall - it's not going to move
+            rowsChecked < grid.length - 1;
+            row -= deltaRow, rowsChecked++
+          ) {
+            const tile = grid[row][col];
+
+            if (tile === NonNumberTiles.EMPTY) continue;
+            if (tile === NonNumberTiles.OBSTACLE) continue;
+
+            const numberTile = numberTiles.get(tile) as TileData;
+
+            const currentCol = grid.map(row => row[col]);
+            const rowToMoveTo = findClosestTileToMoveTo(
+              currentCol,
+              numberTiles,
+              numberTile.row,
+              deltaRow,
+            );
+            // combining with other tile already in this spot
+            if (typeof grid[rowToMoveTo][col] === 'string') {
+              // mark other tile for destruction
+              const otherTileInSpot = numberTiles.get(
+                grid[rowToMoveTo][col] as string,
+              ) as TileData;
+              otherTileInSpot.destroy = true;
+
+
+              // upgrade current tile and mark game as won if target power of 2 reached
+              numberTile.power += 1;
+              numberTile.upgradedThisTurn = true;
+              if (numberTile.power === config.targetPower) gameWon = true;
+            }
+
+            numberTile.row = rowToMoveTo;
+            grid[row][col] = NonNumberTiles.EMPTY;
+            grid[rowToMoveTo][col] = numberTile.id;
           }
         }
       }
@@ -120,7 +171,9 @@ const useGameStore = create<GameState>((set, get) => ({
     set(state => {
       const numberTiles = new Map(state.numberTiles);
       numberTiles.forEach(tile => {
+        if (tile.destroy) console.log('col ', tile.col, ' row ', tile.row);
         if (tile.destroy) numberTiles.delete(tile.id);
+        else if (tile.upgradedThisTurn) tile.upgradedThisTurn = false;
       });
 
       return { numberTiles };

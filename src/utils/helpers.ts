@@ -64,7 +64,11 @@ export const findClosestTileToMoveTo = (
       tilePositionToMoveTo += direction;
     else {
       const nextNumberTile = numberTiles.get(nextTile) as TileData;
-      if (nextNumberTile.power !== numberTileToMove.power) break;
+      if (
+        nextNumberTile.power !== numberTileToMove.power ||
+        nextNumberTile.upgradedThisTurn
+      )
+        break;
       tilePositionToMoveTo += direction;
     }
   }

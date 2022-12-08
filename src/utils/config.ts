@@ -12,7 +12,7 @@ interface GameConfig {
 const config: GameConfig = {
   size: 6,
   obstacles: 0,
-  targetPower: 4,
+  targetPower: 11,
   keyboardShortcutsEnabled: true,
 };
 

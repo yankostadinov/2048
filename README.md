@@ -5,7 +5,7 @@
   <h2 align="center">2048</h3>
 
   <p align="center">
-    <a href="https://2048.github.io.">View Demo</a>
+    <a href="https://yankostadinov.github.io/2048/">View Demo</a>
   </p>
 </div>
 
@@ -55,7 +55,7 @@ To get a local copy up and running follow these simple example steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/yankostadinov/2048.github.io
+   git clone https://github.com/yankostadinov/2048.git
    ```
 2. Install NPM packages
    ```sh
@@ -66,7 +66,7 @@ To get a local copy up and running follow these simple example steps.
    yarn dev
    ```
 
-You should now be able to load the game here: http://127.0.0.1:5173/
+You should now be able to load the game here: http://localhost:5173/2048/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

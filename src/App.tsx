@@ -1,9 +1,10 @@
-import { Box, Button, Center, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 import GameControls from './components/GameControls';
 import Grid from './components/Grid';
+import LoseMessage from './components/LoseMessage';
+import WinMessage from './components/WinMessage';
 import { GameStatus } from './types';
-import config from './utils/config';
 import useGameStore from './utils/store';
 
 const App: FC = () => {
@@ -16,27 +17,11 @@ const App: FC = () => {
       {gameStatus !== GameStatus.INITIAL && (
         <>
           <Box pos="relative">
-            {[GameStatus.LOSE, GameStatus.WIN].includes(gameStatus) && (
-              <Center
-                pos="absolute"
-                top="0"
-                left="0"
-                h="100%"
-                w="100%"
-                bg="blackAlpha.700"
-                // make sure the win screen is always on top of the winning tile
-                zIndex={config.targetPower + 1}
-              >
-                <Text color="white">
-                  {gameStatus === GameStatus.WIN
-                    ? 'Congratulations, you win!'
-                    : 'Game Over'}
-                </Text>
-              </Center>
-            )}
+            {gameStatus === GameStatus.LOSE && <LoseMessage />}
             <Grid />
           </Box>
           {gameStatus === GameStatus.IN_PROGRESS && <GameControls />}
+          {gameStatus === GameStatus.WIN && <WinMessage />}
         </>
       )}
     </VStack>

@@ -98,6 +98,8 @@ const useGameStore = create<GameState>((set, get) => ({
                 currentRow[columnToMoveTo] as string,
               ) as TileData;
               tileToUpgrade.power += 1;
+
+              // mark the game as won if you've reached the target power of 2
               if (tileToUpgrade.power === config.targetPower) gameWon = true;
             } else {
               currentRow[columnToMoveTo] = numberTile.id;

@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
+  Heading,
+  VStack,
+} from '@chakra-ui/react';
+import { FC } from 'react';
+import GameControls from './components/GameControls';
+import Grid from './components/Grid';
+import LoseMessage from './components/LoseMessage';
+import WinMessage from './components/WinMessage';
+import { GameStatus } from './types';
+import useGameStore from './utils/store';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: FC = () => {
+  const startGame = useGameStore(store => store.startGame);
+  const gameStatus = useGameStore(store => store.gameStatus);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+    <Center h="100vh" w="100vw">
+      <Card align="center" px="20px" boxShadow="2xl">
+        <CardHeader>
+          <Heading>Welcome to 2048!</Heading>
+        </CardHeader>
+        <CardBody>
+          <VStack as="main">
+            <Button onClick={() => startGame()}>Start new game</Button>
+            {gameStatus !== GameStatus.INITIAL && (
+              <>
+                <Box pos="relative">
+                  {gameStatus === GameStatus.LOSE && <LoseMessage />}
+                  <Grid />
+                </Box>
+              </>
+            )}
+          </VStack>
+        </CardBody>
+        <CardFooter>
+          {gameStatus === GameStatus.IN_PROGRESS && <GameControls />}
+          {gameStatus === GameStatus.WIN && <WinMessage />}
+        </CardFooter>
+      </Card>
+    </Center>
+  );
+};
 
-export default App
+export default App;

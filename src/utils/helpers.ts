@@ -35,10 +35,17 @@ export const pickRandomEmptyPosition = (grid: Grid) => {
   return pickRandomFromArray(emptyPositions) as GridPosition;
 };
 
-export const generateGrid = (size: number) => {
-  return Array(size)
+export const generateGrid = (size: number, obstaclesCount: number) => {
+  const grid = Array(size)
     .fill(null)
     .map(() => Array(size).fill(NonNumberTiles.EMPTY));
+
+  for (let obstacle = 0; obstacle < obstaclesCount; obstacle++) {
+    const emptyPosition = pickRandomEmptyPosition(grid);
+    grid[emptyPosition.row][emptyPosition.col] = NonNumberTiles.OBSTACLE;
+  }
+
+  return grid;
 };
 export const findClosestTileToMoveTo = (
   tiles: Array<TileType>,

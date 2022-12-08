@@ -30,7 +30,10 @@ const useGameStore = create<GameState>((set, get) => ({
   grid: [],
   numberTiles: new Map(),
   startGame: () => {
-    set(() => ({ grid: generateGrid(config.size), numberTiles: new Map() }));
+    set(() => ({
+      grid: generateGrid(config.size, config.obstacles),
+      numberTiles: new Map(),
+    }));
     get().addNewTile();
     get().addNewTile();
     get().addNewTile();
@@ -49,7 +52,8 @@ const useGameStore = create<GameState>((set, get) => ({
       grid[emptyPosition.row][emptyPosition.col] = newTile.id;
       numberTiles.set(newTile.id, newTile);
 
-      const gridIsFull = numberTiles.size === Math.pow(config.size, 2);
+      const gridIsFull =
+        numberTiles.size + config.obstacles === Math.pow(config.size, 2);
 
       return {
         grid,
